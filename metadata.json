@@ -1,0 +1,6 @@
+{
+  "name": "Preetham High Fashion",
+  "description": "A premium client-focused boutique storefront with a stunning catalog, custom variants selection, Instagram-style Reel overlays, seamless multi-route WooCommerce & WhatsApp checkout solutions, and instant DTDC shipment tracking guides.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
