@@ -152,13 +152,104 @@ get_header(); ?>
 	</div>
 
 	<!-- WooCommerce products loop OR custom responsive catalog cards fallback -->
-	<?php if ( class_exists( 'WooCommerce' ) ) : ?>
+	<?php 
+	if ( class_exists( 'WooCommerce' ) ) : 
+		$args = array(
+			'limit'   => 4,
+			'status'  => 'publish',
+			'orderby' => 'popularity',
+		);
+		$products = wc_get_products( $args );
 		
-		<div class="woocommerce-products-grid">
-			<?php echo do_shortcode('[products limit="4" columns="4" orderby="popularity"]'); ?>
-		</div>
+		if ( ! empty( $products ) ) :
+	?>
+		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+			<?php 
+			foreach ( $products as $product ) : 
+				$prod_id = $product->get_id();
+				$image_id = $product->get_image_id();
+				$image_url = $image_id ? wp_get_attachment_image_url( $image_id, 'large' ) : 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&q=80&w=800';
+				$is_on_sale = $product->is_on_sale();
+				$price = $product->get_price();
+				$regular_price = $product->get_regular_price();
+				$sale_price = $product->get_sale_price();
+				
+				// Safely extract product categories
+				$category_names = array();
+				$terms = get_the_terms( $prod_id, 'product_cat' );
+				if ( $terms && ! is_wp_error( $terms ) ) {
+					foreach ( $terms as $term ) {
+						$category_names[] = $term->name;
+					}
+				}
+				$cats_text = ! empty( $category_names ) ? implode( ', ', $category_names ) : 'Boutique Specialty';
+			?>
+				<div class="bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-md transition-all flex flex-col justify-between" id="woo-prod-<?php echo esc_attr( $prod_id ); ?>">
+					<!-- Image Area -->
+					<div class="relative bg-slate-50 overflow-hidden group">
+						<a href="<?php echo esc_url( get_permalink( $prod_id ) ); ?>" class="block">
+							<img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $product->get_name() ); ?>" class="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300">
+						</a>
+						<?php if ( $is_on_sale ) : ?>
+							<span class="absolute top-3 left-3 bg-brand-rose text-white text-[8px] font-display font-bold uppercase tracking-widest px-2.5 py-1 rounded shadow-lg z-10">SALE!</span>
+						<?php endif; ?>
+					</div>
+					<!-- Content details -->
+					<div class="p-4 flex-grow flex flex-col justify-between space-y-3">
+						<div>
+							<span class="text-slate-400 uppercase text-[9px] font-bold block tracking-wider truncate"><?php echo esc_html( $cats_text ); ?></span>
+							<h3 class="text-brand-blue font-editorial font-bold text-sm block leading-snug mt-1 hover:text-brand-rose transition-colors">
+								<a href="<?php echo esc_url( get_permalink( $prod_id ) ); ?>">
+									<?php echo esc_html( $product->get_name() ); ?>
+								</a>
+							</h3>
+							<span class="text-[10px] text-slate-500 leading-none block mt-1">Stitching: <b>Ready-To-Wear Fit</b></span>
+						</div>
+						<!-- Pricing and direct order -->
+						<div class="flex items-center justify-between pt-3 border-t border-slate-50 gap-2">
+							<div class="shrink-0">
+								<?php if ( $regular_price && $sale_price ) : ?>
+									<span class="text-brand-rose font-display font-bold text-sm block leading-none">₹<?php echo esc_html( number_format( (float)$sale_price ) ); ?></span>
+									<span class="text-slate-400 text-[10px] line-through block font-sans mt-0.5">₹<?php echo esc_html( number_format( (float)$regular_price ) ); ?></span>
+								<?php else : ?>
+									<span class="text-brand-rose font-display font-bold text-sm block">₹<?php echo esc_html( number_format( (float)$regular_price ) ); ?></span>
+								<?php endif; ?>
+							</div>
+							
+							<div class="flex items-center gap-1.5">
+								<!-- Buy / Add to Cart Link trigger -->
+								<a href="<?php echo esc_url( wc_get_cart_url() . '?add-to-cart=' . $prod_id ); ?>" class="bg-brand-blue hover:bg-brand-rose text-white text-[9.5px] font-display font-bold uppercase tracking-wider px-3.5 py-2.5 rounded transition-all flex items-center gap-1 shadow-sm leading-none">
+									<i data-lucide="shopping-bag" class="w-3.5 h-3.5 text-brand-gold-light"></i>
+									<span>Order</span>
+								</a>
 
-	<?php else : ?>
+								<!-- WhatsApp Enquire anchor -->
+								<a href="https://wa.me/919110422718?text=Namaste!%20I%20would%20love%20to%20order%20the%20<?php echo urlencode( $product->get_name() ); ?>%20from%20your%2520Mandya%2520store." target="_blank" rel="noopener noreferrer" class="bg-[#128c7e] hover:bg-[#075e54] text-white p-2 rounded-lg shadow-sm transition-all flex items-center justify-center shrink-0" title="Enquire on WhatsApp">
+									<i data-lucide="message-square" class="w-4 h-4"></i>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			<?php endforeach; ?>
+		</div>
+	<?php 
+		else :
+			// If WooCommerce has no products yet, give clear guidance
+			?>
+			<div class="bg-white rounded-3xl p-8 border border-slate-100 text-center shadow-lg max-w-lg mx-auto">
+				<div class="p-3 bg-brand-gold/10 text-brand-gold rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4">
+					<i data-lucide="shopping-bag" class="w-6 h-6"></i>
+				</div>
+				<h3 class="text-brand-blue font-editorial font-bold text-base">Your WooCommerce Catalog Is Dynamic</h3>
+				<p class="text-xs text-slate-500 mt-2 leading-relaxed">
+					Please follow our installation files inside WordPress admin to add products (e.g., Anarkali sets, Salwar suits) with prices. Once added, they will appear right here automatically!
+				</p>
+			</div>
+			<?php
+		endif;
+	else : 
+	?>
 
 		<!-- FALLBACK INTERACTIVE STATIC GRID IF WOOCOMMERCE INACTIVE -->
 		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

@@ -20,7 +20,7 @@ get_header(); ?>
 		<div class="bg-white p-6 md:p-10 rounded-3xl border border-slate-100 shadow-xl min-h-[500px]">
 			
 			<!-- WooCommerce Content Render Zone -->
-			<div class="woocommerce-custom-adapter prose prose-slate max-w-none">
+			<div class="woocommerce-custom-adapter max-w-none">
 				<?php woocommerce_content(); ?>
 			</div>
 

@@ -54,38 +54,351 @@ Tags: ecommerce, woocommerce, responsive, custom-colors, custom-header, featured
   background: #be1256;
 }
 
-/* WooCommerce Standard Element Resets and Styling Integrations */
+/* WooCommerce Standard Global Resets, Grid Layout & Custom Card Styling Integrations */
+
+/* 1. Global Wrapper Spacers and Main Containers styling */
+.woocommerce-custom-adapter {
+  color: var(--brand-blue) !important;
+}
+
+/* 2. WooCommerce Grid Reset and Styling */
+.woocommerce ul.products {
+  display: grid !important;
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  gap: 1.5rem !important;
+  margin: 2rem 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+  background: transparent !important;
+}
+
+/* Clear float bugs from legacy WooCommerce themes */
+.woocommerce ul.products::before,
+.woocommerce ul.products::after {
+  content: none !important;
+  display: none !important;
+}
+
+@media (min-width: 640px) {
+  .woocommerce ul.products {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .woocommerce ul.products {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+
+/* 3. Product Cards Styling Override */
+.woocommerce ul.products li.product {
+  background: #ffffff !important;
+  border: 1px solid #f1f5f9 !important;
+  border-radius: 1rem !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  align-items: stretch !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+  position: relative !important;
+  width: 100% !important;
+  float: none !important;
+  list-style-type: none !important;
+}
+
+.woocommerce ul.products li.product::before {
+  display: none !important;
+  content: "" !important;
+}
+
+.woocommerce ul.products li.product:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 10px 20px rgba(12, 28, 36, 0.08) !important;
+  border-color: rgba(197, 168, 80, 0.3) !important;
+}
+
+/* 4. Product Anchor Link and Image Controls */
+.woocommerce ul.products li.product a {
+  display: flex !important;
+  flex-direction: column !important;
+  text-decoration: none !important;
+  color: inherit !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.woocommerce ul.products li.product a img {
+  width: 100% !important;
+  height: 20rem !important; /* Fixed 320px h-80 matched */
+  object-fit: cover !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block !important;
+  background: #f8fafc !important;
+  transition: transform 0.3s ease-in-out !important;
+}
+
+.woocommerce ul.products li.product:hover a img {
+  transform: scale(1.03) !important;
+}
+
+/* 5. Loop Titles and Info styling */
+.woocommerce-loop-product__title,
+.woocommerce ul.products li.product .woocommerce-loop-product__title {
+  font-family: 'Playfair Display', Georgia, serif !important;
+  color: var(--brand-blue) !important;
+  font-weight: 700 !important;
+  font-size: 0.875rem !important; /* text-sm matches */
+  line-height: 1.25rem !important;
+  margin: 1.25rem 1.25rem 0.25rem 1.25rem !important;
+  padding: 0 !important;
+  min-height: 2.5rem !important; /* Keeps grids aligned */
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+/* 6. Onsale Badging perfect positioning */
 .woocommerce span.onsale {
   background-color: var(--brand-rose) !important;
-  color: #fff !important;
+  color: #ffffff !important;
   font-family: 'Space Grotesk', sans-serif !important;
   font-weight: 700 !important;
   text-transform: uppercase !important;
-  border-radius: 9999px !important;
-  padding: 4px 12px !important;
-  font-size: 10px !important;
-  line-height: 1.2 !important;
+  border-radius: 4px !important;
+  padding: 4px 10px !important;
+  font-size: 9px !important;
+  line-height: 1 !important;
+  position: absolute !important;
+  top: 1rem !important;
+  left: 1rem !important;
+  right: auto !important;
+  margin: 0 !important;
+  z-index: 10 !important;
+  min-height: auto !important;
 }
 
-.woocommerce ul.products li.product .price, .woocommerce div.product p.price {
+/* 7. Product Loop Price adjustments */
+.woocommerce ul.products li.product .price {
+  font-family: 'Space Grotesk', sans-serif !important;
   color: var(--brand-rose) !important;
+  font-weight: 700 !important;
+  font-size: 0.875rem !important;
+  margin: 0.25rem 1.25rem 1rem 1.25rem !important;
+  padding: 0 !important;
+  display: block !important;
+  order: 5 !important;
+}
+
+.woocommerce ul.products li.product .price del {
+  color: #94a3b8 !important;
+  font-size: 0.75rem !important;
+  margin-right: 0.35rem !important;
+  font-weight: 400 !important;
+  display: inline !important;
+}
+
+.woocommerce ul.products li.product .price ins {
+  background: transparent !important;
+  text-decoration: none !important;
+  color: var(--brand-rose) !important;
+  font-weight: 700 !important;
+  display: inline !important;
+}
+
+/* Sticker badge for Stitching alignment */
+.woocommerce ul.products li.product::after {
+  content: "Stitching: Ready-To-Wear Fit" !important;
+  display: block !important;
+  font-size: 10px !important;
+  color: #64748b !important;
+  margin: 0.25rem 1.25rem 0.75rem 1.25rem !important;
+  font-family: 'Inter', system-ui, sans-serif !important;
+}
+
+/* 8. Loop Add to Cart Button controls */
+.woocommerce ul.products li.product a.button.add_to_cart_button,
+.woocommerce ul.products li.product a.button {
+  background-color: var(--brand-blue) !important;
+  color: #ffffff !important;
+  font-family: 'Space Grotesk', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  text-align: center !important;
+  padding: 0.75rem 1.25rem !important;
+  margin: 0 1.25rem 1.25rem 1.25rem !important;
+  border-radius: 0.5rem !important;
+  display: block !important;
+  transition: all 0.2s ease-in-out !important;
+  text-decoration: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  line-height: 1.2 !important;
+  order: 10 !important;
+}
+
+.woocommerce ul.products li.product a.button:hover {
+  background-color: var(--brand-rose) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(190, 18, 86, 0.2) !important;
+}
+
+/* 9. Sorting, Result Count Layout refinement */
+.woocommerce-ordering, .woocommerce-result-count {
+  float: none !important;
+  display: inline-block !important;
+  margin: 1rem 0 !important;
+  font-family: 'Space Grotesk', sans-serif !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+.woocommerce-ordering select {
+  border: 1px solid #e2e8f0 !important;
+  padding: 0.5rem 1.5rem 0.5rem 0.75rem !important;
+  border-radius: 0.5rem !important;
+  background-color: #ffffff !important;
+  font-family: 'Inter', sans-serif !important;
+  color: var(--brand-blue) !important;
+  font-weight: 500 !important;
+  font-size: 11px !important;
+}
+
+.woocommerce-ordering select:focus {
+  outline: none !important;
+  border-color: var(--brand-gold) !important;
+}
+
+.woocommerce-result-count {
+  color: #64748b !important;
+}
+
+/* 10. Single Product Page Styling */
+.woocommerce div.product {
+  margin-top: 1.5rem !important;
+}
+
+.woocommerce div.product .product_title {
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-weight: 700 !important;
+  color: var(--brand-blue) !important;
+  font-size: 1.75rem !important;
+  line-height: 1.2 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.woocommerce div.product p.price {
+  font-family: 'Space Grotesk', sans-serif !important;
+  font-size: 1.5rem !important;
+  color: var(--brand-rose) !important;
+  font-weight: 700 !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.woocommerce div.product p.price del {
+  font-size: 1.125rem !important;
+}
+
+.woocommerce div.product .woocommerce-product-details__short-description {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12.5px !important;
+  line-height: 1.6 !important;
+  color: #475569 !important;
+  margin-bottom: 1.5rem !important;
+}
+
+/* Gallery and Layout elements */
+.woocommerce #content div.product div.images, 
+.woocommerce div.product div.images, 
+.woocommerce-page #content div.product div.images, 
+.woocommerce-page div.product div.images {
+  float: left !important;
+  width: 48% !important;
+  margin-bottom: 2em !important;
+}
+
+.woocommerce #content div.product div.summary, 
+.woocommerce div.product div.summary, 
+.woocommerce-page #content div.product div.summary, 
+.woocommerce-page div.product div.summary {
+  float: right !important;
+  width: 48% !important;
+  margin-bottom: 2em !important;
+}
+
+/* Forms, buttons, inputs on single product check */
+.woocommerce div.product form.cart .quantity {
+  margin-right: 15px !important;
+}
+
+.woocommerce div.product form.cart .quantity input {
+  padding: 8px !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 6px !important;
   font-family: 'Space Grotesk', sans-serif !important;
   font-weight: 600 !important;
+  color: var(--brand-blue) !important;
 }
 
-.woocommerce a.button.alt, .woocommerce button.button.alt, .woocommerce input.button.alt, .woocommerce #respond input#submit.alt {
+.woocommerce div.product form.cart .button {
   background-color: var(--brand-rose) !important;
   color: #fff !important;
   font-family: 'Space Grotesk', sans-serif !important;
   font-weight: 700 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.05em !important;
-  border-radius: 4px !important;
+  border-radius: 6px !important;
   padding: 12px 24px !important;
-  transition: all 0.2s ease !important;
+  border: none !important;
 }
 
-.woocommerce a.button.alt:hover, .woocommerce button.button.alt:hover, .woocommerce input.button.alt:hover, .woocommerce #respond input#submit.alt:hover {
+.woocommerce div.product form.cart .button:hover {
   background-color: var(--brand-rose-dark) !important;
-  box-shadow: 0 4px 12px rgba(190, 18, 86, 0.2) !important;
+}
+
+/* 11. Cart, Checkout & Table design improvements */
+.woocommerce table.shop_table {
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  border-collapse: separate !important;
+}
+
+.woocommerce table.shop_table th {
+  background-color: #f8fafc !important;
+  color: var(--brand-blue) !important;
+  font-family: 'Space Grotesk', sans-serif !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  font-size: 10px !important;
+  letter-spacing: 0.05em !important;
+  padding: 12px 16px !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.woocommerce table.shop_table td {
+  padding: 16px !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  font-size: 12px !important;
+  font-family: 'Inter', sans-serif !important;
+  color: #334155 !important;
+}
+
+.woocommerce a.remove {
+  color: var(--brand-rose) !important;
+}
+
+.woocommerce a.remove:hover {
+  background: var(--brand-rose) !important;
+  color: #fff !important;
 }
